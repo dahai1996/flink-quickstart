@@ -1,5 +1,10 @@
 #使用此项目更新骨架
 ***
+详情见我的博客：https://www.cnblogs.com/sqhhh/
+
+flink版本：1.13.2
+
+***
 #### 1.用idea打开此项目
 #### 2.在项目中执行
     mvn archetype:create-from-project
