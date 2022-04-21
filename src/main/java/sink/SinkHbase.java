@@ -1,5 +1,6 @@
-package model;
+package sink;
 
+import bean.RunEnv;
 import org.apache.flink.api.common.functions.AbstractRichFunction;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
@@ -10,20 +11,14 @@ import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.BufferedMutatorParams;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
-import ru.yandex.clickhouse.ClickHouseConnection;
-import ru.yandex.clickhouse.ClickHouseDataSource;
-import ru.yandex.clickhouse.ClickHouseStatement;
-import ru.yandex.clickhouse.settings.ClickHouseProperties;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.SQLException;
 
 /**
- * 用于oneId更新到hbase和clickhouse两个地方
  * @author sqh
  */
-public class SinkHbaseAndClickHouse<IN> extends AbstractRichFunction implements SinkFunction<IN> {
+public class SinkHbase<IN> extends AbstractRichFunction implements SinkFunction<IN> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -44,13 +39,6 @@ public class SinkHbaseAndClickHouse<IN> extends AbstractRichFunction implements 
     private final String hbaseZookeeperNodePath;
     private final String zookeeperClientPort;
     private final String sinkTableName;
-    private final String username = "1";
-    private final String password = "1";
-    private final String address = "jdbc:clickhouse://ip:8123";
-    private final String db = "default";
-    private final int socketTimeout = 600000;
-    private ClickHouseConnection chCon;
-    private ClickHouseStatement cHSt;
 
 
     /**
@@ -61,7 +49,7 @@ public class SinkHbaseAndClickHouse<IN> extends AbstractRichFunction implements 
  *                      1.mutator hbase异步缓存提交器
      * @param invokeTypeWithCon 使用UserInvokeInf中哪个invoke方法
      */
-    public SinkHbaseAndClickHouse(RunEnv uat, String sinkTableName, int writeBufferSizeMb, UserInvokeInf<IN> userInvoke, boolean invokeTypeWithCon) {
+    public SinkHbase(RunEnv uat, String sinkTableName, int writeBufferSizeMb, UserInvokeInf<IN> userInvoke, boolean invokeTypeWithCon) {
         this.zookeeperHost = uat.getZookeeperHost();
         this.hbaseZookeeperNodePath = uat.getHbaseZookeeperNodePath();
         this.zookeeperClientPort = uat.getZookeeperClientPort();
@@ -93,24 +81,13 @@ public class SinkHbaseAndClickHouse<IN> extends AbstractRichFunction implements 
         });
 
         mutator = connection.getBufferedMutator(tableName);
-
-        //ch
-        ClickHouseProperties properties = new ClickHouseProperties();
-        properties.setUser(username);
-        properties.setPassword(password);
-        properties.setDatabase(db);
-        properties.setSocketTimeout(socketTimeout);
-        ClickHouseDataSource clickHouseDataSource = new ClickHouseDataSource(address, properties);
-        chCon = clickHouseDataSource.getConnection();
-        cHSt = chCon.createStatement();
-
         super.open(parameters);
     }
 
     @Override
     public void invoke(IN value, Context context) throws Exception {
         if (invokeTypeWithCon) {
-            userInvoke.invokeWithConnect(mutator, value,connection,cHSt);
+            userInvoke.invokeWithConnect(mutator, value,connection);
         }else {
             userInvoke.invoke(mutator,value);
         }
@@ -123,12 +100,6 @@ public class SinkHbaseAndClickHouse<IN> extends AbstractRichFunction implements 
         }
         if (connection != null) {
             connection.close();
-        }
-        if (cHSt != null) {
-            cHSt.close();
-        }
-        if (chCon != null) {
-            chCon.close();
         }
         super.close();
     }
@@ -148,9 +119,8 @@ public class SinkHbaseAndClickHouse<IN> extends AbstractRichFunction implements 
          * @param mutator hbase异步缓存提交api
          * @param value 得到的单条数据
          * @param connection hbase连接器
-         * @param cHSt clickHouse的jdbc statement
          * @throws IOException 调用hbase连接执行需要抛出错误
          */
-        void invokeWithConnect(BufferedMutator mutator, IN value, Connection connection, ClickHouseStatement cHSt) throws IOException, SQLException;
+        void invokeWithConnect(BufferedMutator mutator, IN value,Connection connection) throws IOException;
     }
 }

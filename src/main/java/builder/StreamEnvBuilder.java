@@ -3,15 +3,20 @@ package builder;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.time.Time;
 import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
+import org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage;
 import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
- * @author sqh
+ * @author wfs
  */
 public class StreamEnvBuilder {
     private final StreamExecutionEnvironment env;
+
+    public static StreamEnvBuilder builder() {
+        return new StreamEnvBuilder();
+    }
 
     public StreamEnvBuilder() {
         env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -37,6 +42,11 @@ public class StreamEnvBuilder {
         return this;
     }
 
+    public StreamEnvBuilder setTolerableCheckpointFailureNumber(int tolerableCheckpointFailureNumber) {
+        env.getCheckpointConfig().setTolerableCheckpointFailureNumber(tolerableCheckpointFailureNumber);
+        return this;
+    }
+
     public StreamEnvBuilder setMaxConcurrentCheckpoints(int maxConcurrentCheckpoints) {
         env.getCheckpointConfig().setMaxConcurrentCheckpoints(maxConcurrentCheckpoints);
         return this;
@@ -47,23 +57,29 @@ public class StreamEnvBuilder {
         return this;
     }
 
-    public StreamEnvBuilder setDefaultRestartStrategy(int failureRate, Time failureInterval, Time delayInterval){
-        env.setRestartStrategy(RestartStrategies.failureRateRestart(failureRate,failureInterval,delayInterval));
+    public StreamEnvBuilder setDefaultRestartStrategy(int failureRate, Time failureInterval, Time delayInterval) {
+        env.setRestartStrategy(RestartStrategies.failureRateRestart(failureRate, failureInterval, delayInterval));
         return this;
     }
 
     public StreamEnvBuilder setHashMapStateBackend(int maxStateSizeMb) {
         env.setStateBackend(new HashMapStateBackend());
-        env.getCheckpointConfig().setCheckpointStorage(new JobManagerCheckpointStorage(maxStateSizeMb*1024*1024));
+        env.getCheckpointConfig().setCheckpointStorage(new JobManagerCheckpointStorage(maxStateSizeMb * 1024 * 1024));
         return this;
     }
 
-    public StreamEnvBuilder setParallelism(int parallelism){
+    public StreamEnvBuilder setFileBackend(String path) {
+        env.setStateBackend(new HashMapStateBackend());
+        env.getCheckpointConfig().setCheckpointStorage(new FileSystemCheckpointStorage(path));
+        return this;
+    }
+
+    public StreamEnvBuilder setParallelism(int parallelism) {
         env.setParallelism(parallelism);
         return this;
     }
 
-    public StreamExecutionEnvironment build(){
+    public StreamExecutionEnvironment build() {
         return env;
     }
 

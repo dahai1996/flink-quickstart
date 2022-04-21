@@ -1,5 +1,6 @@
-package model;
+package sink;
 
+import bean.RunEnv;
 import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkFunction;
 import org.apache.flink.streaming.connectors.elasticsearch6.ElasticsearchSink;
 import org.apache.flink.streaming.connectors.elasticsearch6.RestClientFactory;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author sqh
+ * @author wfs
  */
 public class SinkEs<T> {
     public List<HttpHost> httpHosts = new ArrayList<>(1);
@@ -35,8 +36,6 @@ public class SinkEs<T> {
         esSinkBuilder.setBulkFlushMaxActions(1);
         esSinkBuilder.setBulkFlushMaxSizeMb(1);
         esSinkBuilder.setBulkFlushInterval(5000L);
-        //此处为解决es客户端长链接问题：es客户端会启一个超时时间永久的长链接，以后复用此链接，但是长链接gua了之后，还是继续使用，就会报错。
-        //此处添加长链接超时时间，解决该问题
         esSinkBuilder.setRestClientFactory(new RestClientFactory() {
             @Override
             public void configureRestClientBuilder(RestClientBuilder restClientBuilder) {
@@ -57,7 +56,7 @@ public class SinkEs<T> {
     }
 
     /**
-     * 获取es sinkFunction
+     * 获取es sinkFunction see {@link ElasticsearchSink.Builder}
      * @param runEnv 包含执行环境地址的枚举类
      * @param elasticsearchSinkFunction elasticsearchSinkFunction es转化单条数据的逻辑方法
      * @param bulkFlushMaxActions 刷新前缓冲的最大动作量

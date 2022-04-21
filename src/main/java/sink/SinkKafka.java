@@ -1,5 +1,6 @@
-package model;
+package sink;
 
+import bean.RunEnv;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -10,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 /**
- * @author sqh
+ * @author wfs
  */
 public class SinkKafka {
     String topic;
