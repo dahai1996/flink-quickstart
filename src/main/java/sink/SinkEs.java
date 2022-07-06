@@ -5,11 +5,6 @@ import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkFunc
 import org.apache.flink.streaming.connectors.elasticsearch6.ElasticsearchSink;
 import org.apache.flink.streaming.connectors.elasticsearch6.RestClientFactory;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.conn.ConnectionKeepAliveStrategy;
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
-import org.apache.http.protocol.HttpContext;
-import org.elasticsearch.client.RestClientBuilder;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -30,33 +25,20 @@ public class SinkEs<T> {
      */
     public SinkEs(RunEnv runEnv, ElasticsearchSinkFunction<T> elasticsearchSinkFunction) {
         httpHosts.add(new HttpHost(runEnv.getEsHost(), runEnv.getEsPort(), "http"));
-        esSinkBuilder = new ElasticsearchSink.Builder<T>(httpHosts, elasticsearchSinkFunction);
+        esSinkBuilder = new ElasticsearchSink.Builder<>(httpHosts, elasticsearchSinkFunction);
         esSinkBuilder.setBulkFlushMaxActions(1);
         esSinkBuilder.setBulkFlushMaxSizeMb(1);
         esSinkBuilder.setBulkFlushInterval(5000L);
         esSinkBuilder.setRestClientFactory(
-                new RestClientFactory() {
-                    @Override
-                    public void configureRestClientBuilder(RestClientBuilder restClientBuilder) {
-                        restClientBuilder.setHttpClientConfigCallback(
-                                new RestClientBuilder.HttpClientConfigCallback() {
-                                    @Override
-                                    public HttpAsyncClientBuilder customizeHttpClient(
-                                            HttpAsyncClientBuilder httpAsyncClientBuilder) {
-                                        httpAsyncClientBuilder.setKeepAliveStrategy(
-                                                new ConnectionKeepAliveStrategy() {
-                                                    @Override
-                                                    public long getKeepAliveDuration(
-                                                            HttpResponse httpResponse,
-                                                            HttpContext httpContext) {
-                                                        return Duration.ofMinutes(5).toMillis();
-                                                    }
-                                                });
-                                        return httpAsyncClientBuilder;
-                                    }
-                                });
-                    }
-                });
+                (RestClientFactory)
+                        restClientBuilder ->
+                                restClientBuilder.setHttpClientConfigCallback(
+                                        httpAsyncClientBuilder -> {
+                                            httpAsyncClientBuilder.setKeepAliveStrategy(
+                                                    (httpResponse, httpContext) ->
+                                                            Duration.ofMinutes(5).toMillis());
+                                            return httpAsyncClientBuilder;
+                                        }));
     }
 
     /**
@@ -75,7 +57,7 @@ public class SinkEs<T> {
             int bulkFlushMaxSizeMb,
             Long bulkFlushInterval) {
         httpHosts.add(new HttpHost(runEnv.getEsHost(), runEnv.getEsPort(), "http"));
-        esSinkBuilder = new ElasticsearchSink.Builder<T>(httpHosts, elasticsearchSinkFunction);
+        esSinkBuilder = new ElasticsearchSink.Builder<>(httpHosts, elasticsearchSinkFunction);
         esSinkBuilder.setBulkFlushMaxActions(bulkFlushMaxActions);
         esSinkBuilder.setBulkFlushMaxSizeMb(bulkFlushMaxSizeMb);
         esSinkBuilder.setBulkFlushInterval(bulkFlushInterval);

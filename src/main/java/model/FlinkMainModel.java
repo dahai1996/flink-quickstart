@@ -60,10 +60,8 @@ public class FlinkMainModel {
      * @param flinkMainClass 主程序的class
      * @param filePath 文件名,前面带 / ,表示从根目录搜寻
      * @return 配置文件工具
-     * @throws IOException IO异常
      */
-    public static ParameterTool getProFromJar(Class<?> flinkMainClass, String filePath)
-            throws IOException {
+    public static ParameterTool getProFromJar(Class<?> flinkMainClass, String filePath) {
         try {
             InputStream resourceAsStream = flinkMainClass.getResourceAsStream(filePath);
             return ParameterTool.fromPropertiesFile(resourceAsStream);

@@ -7,11 +7,6 @@ import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkFunc
 import org.apache.flink.streaming.connectors.elasticsearch6.ElasticsearchSink;
 import org.apache.flink.streaming.connectors.elasticsearch6.RestClientFactory;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.conn.ConnectionKeepAliveStrategy;
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
-import org.apache.http.protocol.HttpContext;
-import org.elasticsearch.client.RestClientBuilder;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -85,28 +80,15 @@ public class EsSinkBuilder<T> {
 
     public EsSinkBuilder<T> setKeepAliveDurationMinutes(int value) {
         esSinkBuilder.setRestClientFactory(
-                new RestClientFactory() {
-                    @Override
-                    public void configureRestClientBuilder(RestClientBuilder restClientBuilder) {
-                        restClientBuilder.setHttpClientConfigCallback(
-                                new RestClientBuilder.HttpClientConfigCallback() {
-                                    @Override
-                                    public HttpAsyncClientBuilder customizeHttpClient(
-                                            HttpAsyncClientBuilder httpAsyncClientBuilder) {
-                                        httpAsyncClientBuilder.setKeepAliveStrategy(
-                                                new ConnectionKeepAliveStrategy() {
-                                                    @Override
-                                                    public long getKeepAliveDuration(
-                                                            HttpResponse httpResponse,
-                                                            HttpContext httpContext) {
-                                                        return Duration.ofMinutes(value).toMillis();
-                                                    }
-                                                });
-                                        return httpAsyncClientBuilder;
-                                    }
-                                });
-                    }
-                });
+                (RestClientFactory)
+                        restClientBuilder ->
+                                restClientBuilder.setHttpClientConfigCallback(
+                                        httpAsyncClientBuilder -> {
+                                            httpAsyncClientBuilder.setKeepAliveStrategy(
+                                                    (httpResponse, httpContext) ->
+                                                            Duration.ofMinutes(value).toMillis());
+                                            return httpAsyncClientBuilder;
+                                        }));
         return this;
     }
 

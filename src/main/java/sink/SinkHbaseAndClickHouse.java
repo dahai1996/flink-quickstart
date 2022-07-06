@@ -153,6 +153,7 @@ public class SinkHbaseAndClickHouse<IN> extends AbstractRichFunction implements 
          * @param connection hbase连接器
          * @param cHSt clickHouse的jdbc statement
          * @throws IOException 调用hbase连接执行需要抛出错误
+         * @throws SQLException 调用clickHouse连接执行需要抛出错误
          */
         void invokeWithConnect(
                 BufferedMutator mutator, IN value, Connection connection, ClickHouseStatement cHSt)

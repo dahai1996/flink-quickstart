@@ -135,7 +135,7 @@ public class SinkKafka {
     public static class SendByDatabaseAndTableKafkaSerializationSchema
             implements KafkaSerializationSchema<String> {
 
-        private String prefix;
+        private final String prefix;
 
         public SendByDatabaseAndTableKafkaSerializationSchema(String prefix) {
             this.prefix = prefix;

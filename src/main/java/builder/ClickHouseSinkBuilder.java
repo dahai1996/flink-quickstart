@@ -76,12 +76,12 @@ public class ClickHouseSinkBuilder<T> {
             outputFormatList.add(format);
         }
 
-        return new ClickHouseSinkFunction<T>(outputFormatList, shuntValue);
+        return new ClickHouseSinkFunction<>(outputFormatList, shuntValue);
     }
 
     public static <T> ClickHouseSinkBuilder<T> builder(
             String sql, JdbcStatementBuilder<T> statementBuilder, List<String> clickHouseHosts) {
-        return new ClickHouseSinkBuilder<T>(sql, statementBuilder, clickHouseHosts);
+        return new ClickHouseSinkBuilder<>(sql, statementBuilder, clickHouseHosts);
     }
 
     public ClickHouseSinkBuilder(

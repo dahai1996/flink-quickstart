@@ -50,5 +50,5 @@ public class ClickHouseSinkFunction<T> extends RichSinkFunction<T> implements Ch
     }
 
     @Override
-    public void initializeState(FunctionInitializationContext context) throws Exception {}
+    public void initializeState(FunctionInitializationContext context) {}
 }
