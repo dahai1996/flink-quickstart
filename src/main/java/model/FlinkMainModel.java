@@ -42,7 +42,7 @@ public class FlinkMainModel {
      * 以指定序号参数作为配置文件地址，读取该配置文件，没有配置文件将退出程序
      *
      * @param args 主函数参数
-     * @param pos  指定参数序号为配置文件地址
+     * @param pos 指定参数序号为配置文件地址
      * @return 配置文件工具
      */
     public static ParameterTool getPro(String[] args, int pos) throws IOException {
@@ -54,16 +54,16 @@ public class FlinkMainModel {
         return ParameterTool.fromPropertiesFile(propertiesPath);
     }
 
-
     /**
      * 将配置文件打包到jar中,通过文件名获取该配置文件
      *
      * @param flinkMainClass 主程序的class
-     * @param filePath       文件名,前面带 / ,表示从根目录搜寻
+     * @param filePath 文件名,前面带 / ,表示从根目录搜寻
      * @return 配置文件工具
      * @throws IOException IO异常
      */
-    public static ParameterTool getProFromJar(Class<?> flinkMainClass, String filePath) throws IOException {
+    public static ParameterTool getProFromJar(Class<?> flinkMainClass, String filePath)
+            throws IOException {
         try {
             InputStream resourceAsStream = flinkMainClass.getResourceAsStream(filePath);
             return ParameterTool.fromPropertiesFile(resourceAsStream);
@@ -86,16 +86,21 @@ public class FlinkMainModel {
         }
     }
 
-
     /**
-     * @param env         流执行环境
+     * @param env 流执行环境
      * @param sourceKafka kafka数据源
-     * @param duration    水印空闲时间
-     * @param name        该步骤name
+     * @param duration 水印空闲时间
+     * @param name 该步骤name
      * @return 一个带水印的kafka数据源，水印来自于kafka自带的时间戳
      */
-    public static SingleOutputStreamOperator<String> getKafkaSourceWithMonotonousWatermarks(StreamExecutionEnvironment env, FlinkKafkaConsumerBase<String> sourceKafka, Duration duration, String name) {
-        return env.addSource(sourceKafka).assignTimestampsAndWatermarks(WatermarkStrategy.<String>forMonotonousTimestamps().withIdleness(duration)).name(name);
+    public static SingleOutputStreamOperator<String> getKafkaSourceWithMonotonousWatermarks(
+            StreamExecutionEnvironment env,
+            FlinkKafkaConsumerBase<String> sourceKafka,
+            Duration duration,
+            String name) {
+        return env.addSource(sourceKafka)
+                .assignTimestampsAndWatermarks(
+                        WatermarkStrategy.<String>forMonotonousTimestamps().withIdleness(duration))
+                .name(name);
     }
-
 }

@@ -42,8 +42,10 @@ public class StreamEnvBuilder {
         return this;
     }
 
-    public StreamEnvBuilder setTolerableCheckpointFailureNumber(int tolerableCheckpointFailureNumber) {
-        env.getCheckpointConfig().setTolerableCheckpointFailureNumber(tolerableCheckpointFailureNumber);
+    public StreamEnvBuilder setTolerableCheckpointFailureNumber(
+            int tolerableCheckpointFailureNumber) {
+        env.getCheckpointConfig()
+                .setTolerableCheckpointFailureNumber(tolerableCheckpointFailureNumber);
         return this;
     }
 
@@ -52,19 +54,24 @@ public class StreamEnvBuilder {
         return this;
     }
 
-    public StreamEnvBuilder setRestartStrategy(RestartStrategies.RestartStrategyConfiguration restartStrategy) {
+    public StreamEnvBuilder setRestartStrategy(
+            RestartStrategies.RestartStrategyConfiguration restartStrategy) {
         env.setRestartStrategy(restartStrategy);
         return this;
     }
 
-    public StreamEnvBuilder setDefaultRestartStrategy(int failureRate, Time failureInterval, Time delayInterval) {
-        env.setRestartStrategy(RestartStrategies.failureRateRestart(failureRate, failureInterval, delayInterval));
+    public StreamEnvBuilder setDefaultRestartStrategy(
+            int failureRate, Time failureInterval, Time delayInterval) {
+        env.setRestartStrategy(
+                RestartStrategies.failureRateRestart(failureRate, failureInterval, delayInterval));
         return this;
     }
 
     public StreamEnvBuilder setHashMapStateBackend(int maxStateSizeMb) {
         env.setStateBackend(new HashMapStateBackend());
-        env.getCheckpointConfig().setCheckpointStorage(new JobManagerCheckpointStorage(maxStateSizeMb * 1024 * 1024));
+        env.getCheckpointConfig()
+                .setCheckpointStorage(
+                        new JobManagerCheckpointStorage(maxStateSizeMb * 1024 * 1024));
         return this;
     }
 
@@ -82,5 +89,4 @@ public class StreamEnvBuilder {
     public StreamExecutionEnvironment build() {
         return env;
     }
-
 }

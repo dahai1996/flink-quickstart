@@ -20,23 +20,22 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkElementIndex;
 
 /**
- * @author wfs
- * see {@link ElasticsearchSink.Builder}
+ * @author wfs see {@link ElasticsearchSink.Builder}
  */
 public class EsSinkBuilder<T> {
-    private transient final ElasticsearchSink.Builder<T> esSinkBuilder;
+    private final transient ElasticsearchSink.Builder<T> esSinkBuilder;
 
-    public EsSinkBuilder(List<String> esHosts, int esPort, ElasticsearchSinkFunction<T> elasticsearchSinkFunction) {
-        checkElementIndex(0,esHosts.size());
+    public EsSinkBuilder(
+            List<String> esHosts,
+            int esPort,
+            ElasticsearchSinkFunction<T> elasticsearchSinkFunction) {
+        checkElementIndex(0, esHosts.size());
         List<HttpHost> httpHosts = new ArrayList<>(1);
         for (String esHost : esHosts) {
             httpHosts.add(new HttpHost(esHost, esPort, "http"));
         }
 
-        this.esSinkBuilder = new ElasticsearchSink.Builder<>(
-                httpHosts,
-                elasticsearchSinkFunction
-        );
+        this.esSinkBuilder = new ElasticsearchSink.Builder<>(httpHosts, elasticsearchSinkFunction);
     }
 
     public EsSinkBuilder<T> setBulkFlushMaxActions(int value) {
@@ -85,29 +84,33 @@ public class EsSinkBuilder<T> {
     }
 
     public EsSinkBuilder<T> setKeepAliveDurationMinutes(int value) {
-        esSinkBuilder.setRestClientFactory(new RestClientFactory() {
-            @Override
-            public void configureRestClientBuilder(RestClientBuilder restClientBuilder) {
-                restClientBuilder.setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
+        esSinkBuilder.setRestClientFactory(
+                new RestClientFactory() {
                     @Override
-                    public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpAsyncClientBuilder) {
-                        httpAsyncClientBuilder.setKeepAliveStrategy(new ConnectionKeepAliveStrategy() {
-                            @Override
-                            public long getKeepAliveDuration(HttpResponse httpResponse, HttpContext httpContext) {
-                                return Duration.ofMinutes(value).toMillis();
-                            }
-                        });
-                        return httpAsyncClientBuilder;
+                    public void configureRestClientBuilder(RestClientBuilder restClientBuilder) {
+                        restClientBuilder.setHttpClientConfigCallback(
+                                new RestClientBuilder.HttpClientConfigCallback() {
+                                    @Override
+                                    public HttpAsyncClientBuilder customizeHttpClient(
+                                            HttpAsyncClientBuilder httpAsyncClientBuilder) {
+                                        httpAsyncClientBuilder.setKeepAliveStrategy(
+                                                new ConnectionKeepAliveStrategy() {
+                                                    @Override
+                                                    public long getKeepAliveDuration(
+                                                            HttpResponse httpResponse,
+                                                            HttpContext httpContext) {
+                                                        return Duration.ofMinutes(value).toMillis();
+                                                    }
+                                                });
+                                        return httpAsyncClientBuilder;
+                                    }
+                                });
                     }
                 });
-            }
-        });
         return this;
     }
-
 
     public SinkFunction<T> build() {
         return esSinkBuilder.build();
     }
-
 }

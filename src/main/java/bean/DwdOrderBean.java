@@ -1,9 +1,6 @@
 package bean;
 
-
-/**
- * 这是案列bean
- */
+/** 这是案列bean */
 public class DwdOrderBean {
 
     private String order_no;

@@ -1,21 +1,78 @@
 package bean;
 
-import static model.Constant.*;
-
+import static model.Constant.CLICKHOUSE_HOST_UAT;
+import static model.Constant.CLICKHOUSE_HOST_XDP;
+import static model.Constant.CLICKHOUSE_PASSWORD_UAT;
+import static model.Constant.CLICKHOUSE_PASSWORD_XDP;
+import static model.Constant.CLICKHOUSE_PORT_UAT;
+import static model.Constant.CLICKHOUSE_PORT_XDP;
+import static model.Constant.CLICKHOUSE_USER_UAT;
+import static model.Constant.CLICKHOUSE_USER_XDP;
+import static model.Constant.ES_HOST_UAT;
+import static model.Constant.ES_HOST_XDP;
+import static model.Constant.ES_PORT_UAT;
+import static model.Constant.ES_PORT_XDP;
+import static model.Constant.HBASE_ZOOKEEPER_NODE_PATH_UAT;
+import static model.Constant.HBASE_ZOOKEEPER_NODE_PATH_XDP;
+import static model.Constant.KAFKA_HOST_UAT;
+import static model.Constant.KAFKA_HOST_XDP;
+import static model.Constant.KAFKA_PORT_UAT;
+import static model.Constant.KAFKA_PORT_XDP;
+import static model.Constant.MYSQL_HOST_UAT;
+import static model.Constant.MYSQL_HOST_XDP;
+import static model.Constant.MYSQL_PASS_UAT;
+import static model.Constant.MYSQL_PASS_XDP;
+import static model.Constant.MYSQL_USER_UAT;
+import static model.Constant.MYSQL_USER_XDP;
+import static model.Constant.REDIS_HOST_UAT;
+import static model.Constant.REDIS_HOST_XDP;
+import static model.Constant.ZOOKEEPER_CLIENT_PORT_UAT;
+import static model.Constant.ZOOKEEPER_CLIENT_PORT_XDP;
+import static model.Constant.ZOOKEEPER_HOST_UAT;
+import static model.Constant.ZOOKEEPER_HOST_XDP;
 
 /**
  * @author wfs
  */
-
 public enum RunEnv {
     /*
      *   uat环境
      * */
-    uat(KAFKA_HOST_UAT, KAFKA_PORT_UAT, ES_HOST_UAT, ES_PORT_UAT, MYSQL_HOST_UAT, MYSQL_USER_UAT, MYSQL_PASS_UAT, REDIS_HOST_UAT, CLICKHOUSE_HOST_UAT, CLICKHOUSE_PORT_UAT, CLICKHOUSE_USER_UAT, CLICKHOUSE_PASSWORD_UAT, ZOOKEEPER_HOST_UAT, HBASE_ZOOKEEPER_NODE_PATH_UAT, ZOOKEEPER_CLIENT_PORT_UAT),
+    uat(
+            KAFKA_HOST_UAT,
+            KAFKA_PORT_UAT,
+            ES_HOST_UAT,
+            ES_PORT_UAT,
+            MYSQL_HOST_UAT,
+            MYSQL_USER_UAT,
+            MYSQL_PASS_UAT,
+            REDIS_HOST_UAT,
+            CLICKHOUSE_HOST_UAT,
+            CLICKHOUSE_PORT_UAT,
+            CLICKHOUSE_USER_UAT,
+            CLICKHOUSE_PASSWORD_UAT,
+            ZOOKEEPER_HOST_UAT,
+            HBASE_ZOOKEEPER_NODE_PATH_UAT,
+            ZOOKEEPER_CLIENT_PORT_UAT),
     /*
      *   xdp环境
      * */
-    xdp(KAFKA_HOST_XDP, KAFKA_PORT_XDP, ES_HOST_XDP, ES_PORT_XDP, MYSQL_HOST_XDP, MYSQL_USER_XDP, MYSQL_PASS_XDP, REDIS_HOST_XDP, CLICKHOUSE_HOST_XDP, CLICKHOUSE_PORT_XDP, CLICKHOUSE_USER_XDP, CLICKHOUSE_PASSWORD_XDP, ZOOKEEPER_HOST_XDP, HBASE_ZOOKEEPER_NODE_PATH_XDP, ZOOKEEPER_CLIENT_PORT_XDP);
+    xdp(
+            KAFKA_HOST_XDP,
+            KAFKA_PORT_XDP,
+            ES_HOST_XDP,
+            ES_PORT_XDP,
+            MYSQL_HOST_XDP,
+            MYSQL_USER_XDP,
+            MYSQL_PASS_XDP,
+            REDIS_HOST_XDP,
+            CLICKHOUSE_HOST_XDP,
+            CLICKHOUSE_PORT_XDP,
+            CLICKHOUSE_USER_XDP,
+            CLICKHOUSE_PASSWORD_XDP,
+            ZOOKEEPER_HOST_XDP,
+            HBASE_ZOOKEEPER_NODE_PATH_XDP,
+            ZOOKEEPER_CLIENT_PORT_XDP);
 
     private final String kafkaHost;
     private final int kafkaPort;
@@ -33,9 +90,22 @@ public enum RunEnv {
     private final String hbaseZookeeperNodePath;
     private final String zookeeperClientPort;
 
-
-
-    RunEnv(String kafkaHost, int kafkaPort, String esHost, int esPort, String mysqlHost, String mysqlUser, String mysqlPass, String redisHost, String clickHouseHost, int clickHousePort, String clickHouseUser, String clickHousePassword, String zookeeperHost, String hbaseZookeeperNodePath, String zookeeperClientPort) {
+    RunEnv(
+            String kafkaHost,
+            int kafkaPort,
+            String esHost,
+            int esPort,
+            String mysqlHost,
+            String mysqlUser,
+            String mysqlPass,
+            String redisHost,
+            String clickHouseHost,
+            int clickHousePort,
+            String clickHouseUser,
+            String clickHousePassword,
+            String zookeeperHost,
+            String hbaseZookeeperNodePath,
+            String zookeeperClientPort) {
         this.kafkaHost = kafkaHost;
         this.kafkaPort = kafkaPort;
         this.esHost = esHost;

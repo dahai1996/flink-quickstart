@@ -19,46 +19,52 @@ import java.util.function.Function;
  * @author wfs
  */
 public class JdbcSink4ClickHouse {
-    public static <T> SinkFunction<T> sink(String sql,
-                                           JdbcStatementBuilder<T> statementBuilder,
-                                           JdbcExecutionOptions executionOptions,
-                                           List<String> clickHouseHosts,
-                                           String clickHousePort,
-                                           String clickHouseUser,
-                                           String clickHousePassword,
-                                           String clickHouseDatabase,
-                                           ShuntValue<T> shuntValue
-                                           ){
+    public static <T> SinkFunction<T> sink(
+            String sql,
+            JdbcStatementBuilder<T> statementBuilder,
+            JdbcExecutionOptions executionOptions,
+            List<String> clickHouseHosts,
+            String clickHousePort,
+            String clickHouseUser,
+            String clickHousePassword,
+            String clickHouseDatabase,
+            ShuntValue<T> shuntValue) {
 
-
-        List<JdbcConnectionOptions> connectionOptionsList=new ArrayList<>(5);
+        List<JdbcConnectionOptions> connectionOptionsList = new ArrayList<>(5);
         for (String clickHouseHost : clickHouseHosts) {
-            JdbcConnectionOptions build = new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                    .withUrl("jdbc:clickhouse://" + clickHouseHost + ":" + clickHousePort + "/" + clickHouseDatabase)
-                    .withDriverName("ru.yandex.clickhouse.ClickHouseDriver")
-                    .withUsername(clickHouseUser)
-                    .withPassword(clickHousePassword)
-                    .build();
+            JdbcConnectionOptions build =
+                    new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
+                            .withUrl(
+                                    "jdbc:clickhouse://"
+                                            + clickHouseHost
+                                            + ":"
+                                            + clickHousePort
+                                            + "/"
+                                            + clickHouseDatabase)
+                            .withDriverName("ru.yandex.clickhouse.ClickHouseDriver")
+                            .withUsername(clickHouseUser)
+                            .withPassword(clickHousePassword)
+                            .build();
             connectionOptionsList.add(build);
         }
 
-        List<AbstractJdbcOutputFormat<T>> outputFormatList=new ArrayList<>(5);
+        List<AbstractJdbcOutputFormat<T>> outputFormatList = new ArrayList<>(5);
         for (JdbcConnectionOptions singleConnectionOption : connectionOptionsList) {
-            AbstractJdbcOutputFormat<T> format = new JdbcBatchingOutputFormat<>(
-                    new SimpleJdbcConnectionProvider(singleConnectionOption),
-                    executionOptions,
-                    context -> {
-                        Preconditions.checkState(
-                                !context.getExecutionConfig().isObjectReuseEnabled(),
-                                "objects can not be reused with JDBC sink function");
-                        return JdbcBatchStatementExecutor.simple(
-                                sql, statementBuilder, Function.identity());
-                    },
-                    JdbcBatchingOutputFormat.RecordExtractor.identity());
+            AbstractJdbcOutputFormat<T> format =
+                    new JdbcBatchingOutputFormat<>(
+                            new SimpleJdbcConnectionProvider(singleConnectionOption),
+                            executionOptions,
+                            context -> {
+                                Preconditions.checkState(
+                                        !context.getExecutionConfig().isObjectReuseEnabled(),
+                                        "objects can not be reused with JDBC sink function");
+                                return JdbcBatchStatementExecutor.simple(
+                                        sql, statementBuilder, Function.identity());
+                            },
+                            JdbcBatchingOutputFormat.RecordExtractor.identity());
             outputFormatList.add(format);
         }
 
-        return new ClickHouseSinkFunction<>(outputFormatList,shuntValue);
+        return new ClickHouseSinkFunction<>(outputFormatList, shuntValue);
     }
-
 }

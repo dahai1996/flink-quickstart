@@ -17,14 +17,22 @@ public class SourceKafkaBuilder<T> {
     private final String topic;
     private final DeserializationSchema<T> valueDeserializer;
 
-    public static <T> SourceKafkaBuilder<T> builder(RunEnv runEnv, String topic, String groupId, DeserializationSchema<T> valueDeserializer) {
+    public static <T> SourceKafkaBuilder<T> builder(
+            RunEnv runEnv,
+            String topic,
+            String groupId,
+            DeserializationSchema<T> valueDeserializer) {
         checkNotNull(runEnv);
         checkNotNull(topic);
         checkNotNull(groupId);
         return new SourceKafkaBuilder<>(runEnv, topic, groupId, valueDeserializer);
     }
 
-    public SourceKafkaBuilder(RunEnv runEnv, String topic, String groupId, DeserializationSchema<T> valueDeserializer) {
+    public SourceKafkaBuilder(
+            RunEnv runEnv,
+            String topic,
+            String groupId,
+            DeserializationSchema<T> valueDeserializer) {
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, runEnv.getKafkaHost());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
@@ -53,7 +61,7 @@ public class SourceKafkaBuilder<T> {
     }
 
     /**
-     * @param key   ConsumerConfig中包含的key
+     * @param key ConsumerConfig中包含的key
      * @param value 值
      * @return 构造器
      * @see ConsumerConfig

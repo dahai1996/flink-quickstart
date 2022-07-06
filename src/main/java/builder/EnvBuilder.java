@@ -8,7 +8,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 public class EnvBuilder {
     private final ExecutionEnvironment env;
 
-    public static EnvBuilder builder(){
+    public static EnvBuilder builder() {
         return new EnvBuilder();
     }
 
@@ -16,12 +16,12 @@ public class EnvBuilder {
         env = ExecutionEnvironment.getExecutionEnvironment();
     }
 
-    public EnvBuilder setParallelism(int parallelism){
+    public EnvBuilder setParallelism(int parallelism) {
         env.setParallelism(parallelism);
         return this;
     }
 
-    public ExecutionEnvironment build(){
+    public ExecutionEnvironment build() {
         return env;
     }
 }

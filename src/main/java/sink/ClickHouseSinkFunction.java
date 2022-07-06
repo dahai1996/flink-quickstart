@@ -19,7 +19,8 @@ public class ClickHouseSinkFunction<T> extends RichSinkFunction<T> implements Ch
     private final ShuntValue<T> shuntValueImp;
     private final int size;
 
-    public ClickHouseSinkFunction(List<AbstractJdbcOutputFormat<T>> outputFormatList, ShuntValue<T> shuntValueImp) {
+    public ClickHouseSinkFunction(
+            List<AbstractJdbcOutputFormat<T>> outputFormatList, ShuntValue<T> shuntValueImp) {
         this.outputFormatList = outputFormatList;
         this.shuntValueImp = shuntValueImp;
         this.size = outputFormatList.size();
@@ -49,7 +50,5 @@ public class ClickHouseSinkFunction<T> extends RichSinkFunction<T> implements Ch
     }
 
     @Override
-    public void initializeState(FunctionInitializationContext context) throws Exception {
-
-    }
+    public void initializeState(FunctionInitializationContext context) throws Exception {}
 }
