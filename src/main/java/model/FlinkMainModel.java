@@ -6,7 +6,6 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumerBase;
-import org.mortbay.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +33,7 @@ public class FlinkMainModel {
             throw new IOException("args[0] must be properties path.");
         }
         String propertiesPath = args[0];
-        Log.info("arg[0] is set as properties path: " + propertiesPath);
+        LOG.info("arg[0] is set as properties path: " + propertiesPath);
         return ParameterTool.fromPropertiesFile(propertiesPath);
     }
 
@@ -50,7 +49,7 @@ public class FlinkMainModel {
             throw new IOException("args[pos] must be properties path.");
         }
         String propertiesPath = args[pos];
-        Log.info("arg[{}] is set as properties path: {}", pos, propertiesPath);
+        LOG.info("arg[{}] is set as properties path: {}", pos, propertiesPath);
         return ParameterTool.fromPropertiesFile(propertiesPath);
     }
 
