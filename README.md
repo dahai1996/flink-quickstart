@@ -10,7 +10,7 @@ flink版本：1.13.6 scala 2.12
 ```shell
     <groupId>com.sqh</groupId>
     <artifactId>flink-quickstart</artifactId>
-    <version>1.3.0</version>
+    <version>1.3.1</version>
 ```
 
 ***
