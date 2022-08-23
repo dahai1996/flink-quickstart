@@ -17,17 +17,6 @@ public class SourceKafkaBuilder<T> {
     private final String topic;
     private final DeserializationSchema<T> valueDeserializer;
 
-    public static <T> SourceKafkaBuilder<T> builder(
-            RunEnv runEnv,
-            String topic,
-            String groupId,
-            DeserializationSchema<T> valueDeserializer) {
-        checkNotNull(runEnv);
-        checkNotNull(topic);
-        checkNotNull(groupId);
-        return new SourceKafkaBuilder<>(runEnv, topic, groupId, valueDeserializer);
-    }
-
     public SourceKafkaBuilder(
             RunEnv runEnv,
             String topic,
@@ -38,6 +27,17 @@ public class SourceKafkaBuilder<T> {
 
         this.topic = topic;
         this.valueDeserializer = valueDeserializer;
+    }
+
+    public static <T> SourceKafkaBuilder<T> builder(
+            RunEnv runEnv,
+            String topic,
+            String groupId,
+            DeserializationSchema<T> valueDeserializer) {
+        checkNotNull(runEnv);
+        checkNotNull(topic);
+        checkNotNull(groupId);
+        return new SourceKafkaBuilder<>(runEnv, topic, groupId, valueDeserializer);
     }
 
     public SourceKafkaBuilder<T> setSessionTimeOutMs(String sessionTimeOutMs) {

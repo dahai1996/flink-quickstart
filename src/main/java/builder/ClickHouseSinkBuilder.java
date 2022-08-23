@@ -30,6 +30,18 @@ public class ClickHouseSinkBuilder<T> {
     private String clickHouseDatabase = "default";
     private ShuntValue<T> shuntValue = Object::hashCode;
 
+    public ClickHouseSinkBuilder(
+            String sql, JdbcStatementBuilder<T> statementBuilder, List<String> clickHouseHosts) {
+        this.sql = sql;
+        this.statementBuilder = statementBuilder;
+        this.clickHouseHosts = clickHouseHosts;
+    }
+
+    public static <T> ClickHouseSinkBuilder<T> builder(
+            String sql, JdbcStatementBuilder<T> statementBuilder, List<String> clickHouseHosts) {
+        return new ClickHouseSinkBuilder<>(sql, statementBuilder, clickHouseHosts);
+    }
+
     private SinkFunction<T> buildAll(
             String sql,
             JdbcStatementBuilder<T> statementBuilder,
@@ -77,18 +89,6 @@ public class ClickHouseSinkBuilder<T> {
         }
 
         return new ClickHouseSinkFunction<>(outputFormatList, shuntValue);
-    }
-
-    public static <T> ClickHouseSinkBuilder<T> builder(
-            String sql, JdbcStatementBuilder<T> statementBuilder, List<String> clickHouseHosts) {
-        return new ClickHouseSinkBuilder<>(sql, statementBuilder, clickHouseHosts);
-    }
-
-    public ClickHouseSinkBuilder(
-            String sql, JdbcStatementBuilder<T> statementBuilder, List<String> clickHouseHosts) {
-        this.sql = sql;
-        this.statementBuilder = statementBuilder;
-        this.clickHouseHosts = clickHouseHosts;
     }
 
     public ClickHouseSinkBuilder<T> setExecutionOptions(JdbcExecutionOptions executionOptions) {

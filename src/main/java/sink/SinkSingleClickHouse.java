@@ -91,10 +91,6 @@ public class SinkSingleClickHouse<T> {
                                 .build());
     }
 
-    public SinkFunction<T> getSink() {
-        return sink;
-    }
-
     /**
      * 用于设置clickhouse PreparedStatement的通用方法
      *
@@ -121,5 +117,9 @@ public class SinkSingleClickHouse<T> {
                 ps.setNull(i, 0);
             }
         }
+    }
+
+    public SinkFunction<T> getSink() {
+        return sink;
     }
 }

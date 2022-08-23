@@ -9,11 +9,7 @@ import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.BufferedMutator;
-import org.apache.hadoop.hbase.client.BufferedMutatorParams;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.*;
 import ru.yandex.clickhouse.ClickHouseConnection;
 import ru.yandex.clickhouse.ClickHouseDataSource;
 import ru.yandex.clickhouse.ClickHouseStatement;
@@ -36,7 +32,6 @@ public class SinkHbaseAndClickHouseWithCache<IN> extends AbstractRichFunction
     private static Connection connection;
     private static BufferedMutator mutator;
     private final int writeBufferSizeMb;
-    UserInvokeInf<IN> userInvoke;
     private final String zookeeperHost;
     private final String hbaseZookeeperNodePath;
     private final String zookeeperClientPort;
@@ -46,9 +41,10 @@ public class SinkHbaseAndClickHouseWithCache<IN> extends AbstractRichFunction
     private final String clickhouseHost;
     private final String db;
     private final int socketTimeout = 600000;
+    private final Cache<String, String> cache;
+    UserInvokeInf<IN> userInvoke;
     private ClickHouseConnection chCon;
     private ClickHouseStatement chSt;
-    private final Cache<String, String> cache;
     private Table table;
 
     /**

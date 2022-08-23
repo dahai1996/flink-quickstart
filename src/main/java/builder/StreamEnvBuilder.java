@@ -14,12 +14,12 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 public class StreamEnvBuilder {
     private final StreamExecutionEnvironment env;
 
-    public static StreamEnvBuilder builder() {
-        return new StreamEnvBuilder();
-    }
-
     public StreamEnvBuilder() {
         env = StreamExecutionEnvironment.getExecutionEnvironment();
+    }
+
+    public static StreamEnvBuilder builder() {
+        return new StreamEnvBuilder();
     }
 
     public StreamEnvBuilder setCheckpointInterval(long checkpointInterval) {

@@ -19,22 +19,21 @@ import java.io.Serializable;
  * @author sqh
  */
 public class SinkHbase<IN> extends AbstractRichFunction implements SinkFunction<IN> {
-    private static final long serialVersionUID = 1L;
-
     /** 表示使用invokeWithConnect方法 */
     public static final boolean INVOKE_TYPE_WITH_CON = true;
     /** 表示使用invoke方法 */
     public static final boolean INVOKE_TYPE_NO_CON = false;
 
+    private static final long serialVersionUID = 1L;
     private static Connection connection;
     private static BufferedMutator mutator;
     private final int writeBufferSizeMb;
     private final boolean invokeTypeWithCon;
-    UserInvokeInf<IN> userInvoke;
     private final String zookeeperHost;
     private final String hbaseZookeeperNodePath;
     private final String zookeeperClientPort;
     private final String sinkTableName;
+    UserInvokeInf<IN> userInvoke;
 
     /**
      * 新建一个hbase sink

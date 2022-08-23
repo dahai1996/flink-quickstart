@@ -26,18 +26,16 @@ import java.sql.SQLException;
  * @author sqh
  */
 public class SinkHbaseAndClickHouse<IN> extends AbstractRichFunction implements SinkFunction<IN> {
-    private static final long serialVersionUID = 1L;
-
     /** 表示使用invokeWithConnect方法 */
     public static final boolean INVOKE_TYPE_WITH_CON = true;
     /** 表示使用invoke方法 */
     public static final boolean INVOKE_TYPE_NO_CON = false;
 
+    private static final long serialVersionUID = 1L;
     private static Connection connection;
     private static BufferedMutator mutator;
     private final int writeBufferSizeMb;
     private final boolean invokeTypeWithCon;
-    UserInvokeInf<IN> userInvoke;
     private final String zookeeperHost;
     private final String hbaseZookeeperNodePath;
     private final String zookeeperClientPort;
@@ -47,6 +45,7 @@ public class SinkHbaseAndClickHouse<IN> extends AbstractRichFunction implements 
     private final String address = "jdbc:clickhouse://mydatawayhdp1:8123";
     private final String db = "default";
     private final int socketTimeout = 600000;
+    UserInvokeInf<IN> userInvoke;
     private ClickHouseConnection chCon;
     private ClickHouseStatement cHSt;
 

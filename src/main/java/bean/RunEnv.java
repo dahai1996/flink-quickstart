@@ -1,35 +1,6 @@
 package bean;
 
-import static model.Constant.CLICKHOUSE_HOST_UAT;
-import static model.Constant.CLICKHOUSE_HOST_XDP;
-import static model.Constant.CLICKHOUSE_PASSWORD_UAT;
-import static model.Constant.CLICKHOUSE_PASSWORD_XDP;
-import static model.Constant.CLICKHOUSE_PORT_UAT;
-import static model.Constant.CLICKHOUSE_PORT_XDP;
-import static model.Constant.CLICKHOUSE_USER_UAT;
-import static model.Constant.CLICKHOUSE_USER_XDP;
-import static model.Constant.ES_HOST_UAT;
-import static model.Constant.ES_HOST_XDP;
-import static model.Constant.ES_PORT_UAT;
-import static model.Constant.ES_PORT_XDP;
-import static model.Constant.HBASE_ZOOKEEPER_NODE_PATH_UAT;
-import static model.Constant.HBASE_ZOOKEEPER_NODE_PATH_XDP;
-import static model.Constant.KAFKA_HOST_UAT;
-import static model.Constant.KAFKA_HOST_XDP;
-import static model.Constant.KAFKA_PORT_UAT;
-import static model.Constant.KAFKA_PORT_XDP;
-import static model.Constant.MYSQL_HOST_UAT;
-import static model.Constant.MYSQL_HOST_XDP;
-import static model.Constant.MYSQL_PASS_UAT;
-import static model.Constant.MYSQL_PASS_XDP;
-import static model.Constant.MYSQL_USER_UAT;
-import static model.Constant.MYSQL_USER_XDP;
-import static model.Constant.REDIS_HOST_UAT;
-import static model.Constant.REDIS_HOST_XDP;
-import static model.Constant.ZOOKEEPER_CLIENT_PORT_UAT;
-import static model.Constant.ZOOKEEPER_CLIENT_PORT_XDP;
-import static model.Constant.ZOOKEEPER_HOST_UAT;
-import static model.Constant.ZOOKEEPER_HOST_XDP;
+import static model.Constant.*;
 
 /**
  * @author wfs
