@@ -43,9 +43,9 @@ public class FlinkMain extends FlinkMainModel {
          * */
 
         // 环境设置
-        // 1.检查是否传递配置文件路径
+        // 1.参数为配置文件地址,从该地址读取配置文件
         ParameterTool pro = getPro(args, 0);
-        // 从jar包中读取配置文件,
+        // 2.从jar包中读取配置文件
         ParameterTool pro2 = getProFromJar(FlinkMain.class, "/mdw-flink-quickstart.properties");
 
         long checkpointInterval = pro.getLong("checkpointInterval", 60000);
@@ -71,7 +71,6 @@ public class FlinkMain extends FlinkMainModel {
 
         // 数据源和数据目的定义
         // 1. 数据源例子: kafka source
-
         FlinkKafkaConsumerBase<String> sourceKafka =
                 SourceKafkaBuilder.builder(uat, topicName, groupId, new SimpleStringSchema())
                         .setRequestTimeOutMs("60000")
@@ -79,7 +78,7 @@ public class FlinkMain extends FlinkMainModel {
                         .build()
                         .setStartFromGroupOffsets();
 
-        // 2. 数据目的例子: es sink
+        // 2.  es sink
         SinkFunction<String> sinkEs =
                 new SinkEs<>(
                                 uat,
@@ -117,7 +116,7 @@ public class FlinkMain extends FlinkMainModel {
                         .setBulkFlushBackoffRetries(3)
                         .build();
 
-        // 3. 数据目的例子： 单节点clickhouse sink
+        // 3. 单节点clickhouse sink
         SinkFunction<DwdOrderBean> sinkClickhouse =
                 new SinkSingleClickHouse<>(
                                 "insert into tableName (id,name) values (?,?)",
@@ -174,7 +173,7 @@ public class FlinkMain extends FlinkMainModel {
                                 return value.getTenant_code().hashCode();
                             }
                         });
-        // clickhouse集群，分流写入，用于分布式表
+        // 5. clickhouse集群，分流写入，用于分布式表
         SinkFunction<DwdOrderBean> sinkClusterClickHouse =
                 ClickHouseSinkBuilder.builder(
                                 "insert into tableName (id,name) values (?,?)",
@@ -207,7 +206,7 @@ public class FlinkMain extends FlinkMainModel {
                                         .build())
                         .build();
 
-        // 转化操作
+        // 提取kafka时间戳为水印
         SingleOutputStreamOperator<String> streamKafka1 =
                 getKafkaSourceWithMonotonousWatermarks(
                         env, sourceKafka, Duration.ofSeconds(10), "source");

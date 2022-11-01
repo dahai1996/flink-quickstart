@@ -1,7 +1,6 @@
 # 使用此项目更新骨架
 
 ***
-详情见我的博客：https://www.cnblogs.com/sqhhh/
 
 flink版本：1.13.6 scala 2.12
 
@@ -10,7 +9,7 @@ flink版本：1.13.6 scala 2.12
 ```shell
     <groupId>com.sqh</groupId>
     <artifactId>flink-quickstart</artifactId>
-    <version>1.3.1</version>
+    <version>1.3.2</version>
 ```
 
 ***
