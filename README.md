@@ -8,7 +8,7 @@ flink版本：1.13.6 scala 2.12
 
 ```shell
     <groupId>com.sqh</groupId>
-    <artifactId>flink-quickstart</artifactId>
+    <artifactId>flink-quickstart-archetype</artifactId>
     <version>1.3.2</version>
 ```
 
@@ -25,6 +25,11 @@ flink版本：1.13.6 scala 2.12
     mvn install
 
 #### 4.新建项目，在maven选项中添加新的骨架，注意各个属性对应填写，其中repository填写local
+
+```shell
+新版本idea中不需要填写 repository ,需要填写目录或者url.
+对此,我们执行了步骤3得 mvn install 成功,可以不填写目录或者url这一栏.
+```
 
 #### 5.测试：使用新骨架创建新项目查看是否生效
 
