@@ -9,8 +9,16 @@ flink版本：1.13.6 scala 2.12
 ```shell
     <groupId>com.sqh</groupId>
     <artifactId>flink-quickstart-archetype</artifactId>
-    <version>1.3.2</version>
+    <version>2.0.0</version>
 ```
+
+#### 更多连接器:
+
+1. [apache-flink-connector子项目,包含多个连接器实现](https://github.com/dahai1996/bahir-flink)
+2. [flink-cdc](https://github.com/ververica/flink-cdc-connectors)
+3. [flink-connector-redis](https://github.com/dahai1996/flink-connector-lettuce-redis)
+4. [doris-flink-connector](https://github.com/apache/doris-flink-connector)
+5. 其他
 
 ***
 
